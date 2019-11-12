@@ -1,12 +1,12 @@
 <template>
-    <div id="test">{{test}}</div>
+    <div id="test">should show abc: {{text}}</div>
 </template>
 
 <script>
     export default {
         data() {
             return {
-                text: "abc"
+                text: "abcdef"
             }
         },
         props: {},
