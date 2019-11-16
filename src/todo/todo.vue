@@ -5,37 +5,64 @@
                autofocus="autofocus"
                placeholder="接下去要做什麽"
                @keyup.enter="addTodo">
-        <Item :todo="todo"></Item>
-        <tabs :filter="filter"></tabs>
+        <Item v-for="todo in filteredTodos"
+              :todo="todo"
+              :key="todo.id"
+              @del="deleteTodo"/>
+        <tabs :filter="filter"
+              :todos="todos"
+              @toggle="toggleFilter"
+              @clearAllCompleted="clearAllCompleted"/>
     </section>
 </template>
 
 <script>
-    import Item from './item.vue'
-    import Tabs from './tabs.vue'
+  import Item from './item.vue'
+  import Tabs from './tabs.vue'
 
-    export default {
-        name: "todo",
-        data() {
-            return {
-                filter: 'all',
-                todo: {
-                    id: 0,
-                    content: 'this is todo',
-                    completed: false,
-                }
-            }
-        },
-        components: {
-            Item,
-            Tabs
-        },
-        methods: {
-            addTodo() {
+  let id = 0
 
-            }
+  export default {
+    name: "todo",
+    computed: {
+      filteredTodos() {
+        if (this.filter === 'all') {
+          return this.todos
         }
+        const completed = this.filter === 'completed'
+        return this.todos.filter(todo => todo.completed === completed)
+      }
+    },
+    data() {
+      return {
+        filter: 'all',
+        todos: []
+      }
+    },
+    components: {
+      Item,
+      Tabs
+    },
+    methods: {
+      clearAllCompleted() {
+        this.todos = this.todos.filter(todo => !todo.completed)
+      },
+      toggleFilter(state) {
+        this.filter = state
+      },
+      addTodo(e) {
+        this.todos.unshift({
+          id: id++,
+          content: e.target.value.trim(),
+          completed: false,
+        })
+        e.target.value = ''
+      },
+      deleteTodo(id) {
+        this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
+      }
     }
+  }
 </script>
 
 <style lang="stylus" scoped>

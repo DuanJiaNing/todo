@@ -10,20 +10,20 @@
 </template>
 
 <script>
-    export default {
-        name: "item",
-        methods: {
-            deleteTodo() {
-
-            }
-        },
-        props: {
-            todo: {
-                type: Object,
-                required: true
-            }
-        }
+  export default {
+    name: "item",
+    methods: {
+      deleteTodo() {
+        this.$emit('del', this.todo.id)
+      }
+    },
+    props: {
+      todo: {
+        type: Object,
+        required: true
+      }
     }
+  }
 </script>
 
 <style lang="stylus" scoped>
